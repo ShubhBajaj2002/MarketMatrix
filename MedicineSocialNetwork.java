@@ -479,7 +479,7 @@ public class MedicineSocialNetwork {
 					System.out.println("Enter product quantity: \n");
 					int quantity = this.input.nextInt();
 					if(this.shopsAndWarehouseDetails.get(shopName).productAndQuantity.get(productName) < quantity){
-						System.out.println("Quantity exceeding from that present in shop\n");
+						System.out.println("Quantity exceeding the available quantity in shop\n");
 						return;
 					}
 					else{
