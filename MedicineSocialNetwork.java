@@ -211,17 +211,17 @@ public class MedicineSocialNetwork {
 		System.out.println("Created Customer : " + c.name);
 	}
 	private void createProduct(){
-		System.out.println("Enter the name of the Product:\n");
+		System.out.println("Enter the name of the Product :\n");
 		this.input.nextLine();
 		String name = this.input.nextLine();
 		Product p = new Product(name, null);
 		this.productDetails.put(name,p);
 		this.numberOfProducts++;
-		System.out.println("Created Product:" + p.name);
+		System.out.println("Created Product : " + p.name);
 	}
 
 	private void createShopsAndWarehouse(){
-		System.out.println("Enter the name of the Shops or Warehouse:\n");
+		System.out.println("Enter the name of the Shops or Warehouse :\n");
 		this.input.nextLine();
 		String name = this.input.nextLine();
 		if(this.shopsAndWarehouseDetails.containsKey(name) ){
@@ -234,7 +234,7 @@ public class MedicineSocialNetwork {
 
 		ShopsAndWarehouse s = new ShopsAndWarehouse(name);
 		this.shopsAndWarehouseDetails.put(name,s);
-		System.out.println("Created Shop: " + s.name);
+		System.out.println("Created Shop : " + s.name);
 	}
 
 //////////////////////////////////////////// DELETE ////////////////////////////////////////////
@@ -269,6 +269,7 @@ public class MedicineSocialNetwork {
 	private void DeleteManufacturer(){
 		System.out.print("Enter the name of the Manufacturer which you wish to delete from the given options : \n");
 		printManufacturer();
+		System.out.println("\n");
 		this.input.nextLine();
 		String name = this.input.nextLine();
 		if(!manufacturerDetails.containsKey(name)){
@@ -285,6 +286,7 @@ public class MedicineSocialNetwork {
 	private void DeleteCustomer(){
 		System.out.print("Enter the name of the Customer which you wish to delete from the given options : \n");
 		printCustomer();
+		System.out.println("\n");
 		this.input.nextLine();
 		String name = this.input.nextLine();
 		if(!customerDetails.containsKey(name)){
@@ -298,6 +300,7 @@ public class MedicineSocialNetwork {
 	private void DeleteProduct(){
 		System.out.print("Enter the name of the Product which you wish to delete from the given options : \n");
 		printProduct();
+		System.out.println("\n");
 		this.input.nextLine();
 		String name = this.input.nextLine();
 		if(!productDetails.containsKey(name)){
@@ -315,6 +318,7 @@ public class MedicineSocialNetwork {
 	private void DeleteShopsAndWarehouse(){
 		System.out.print("Enter the name of the ShopsAndWarehouse which you wish to delete from the given options : \n");
 		printShopsAndWarehouse();
+		System.out.println("\n");
 		this.input.nextLine();
 		String name = this.input.nextLine();
 		if(!shopsAndWarehouseDetails.containsKey(name)){
@@ -377,6 +381,7 @@ public class MedicineSocialNetwork {
 	private void addProductToManufacturer(){
 		System.out.println("Enter the name of the Product which you wish to add from the given list : \n");
 		printProduct();
+		System.out.println("\n");
 		String name = this.input.nextLine();
 		if(!this.productDetails.containsKey(name)){
 			System.out.println("Product " + name + " doesn't exist.\n");	
@@ -384,6 +389,7 @@ public class MedicineSocialNetwork {
 		}
 		System.out.println("Enter the name of the Manufacturer from the given list : \n");
 		printManufacturer();
+		System.out.println("\n");
 		String manufacturerName = this.input.nextLine();
 		if(!this.manufacturerDetails.containsKey(manufacturerName)){
 			System.out.println("Manufacturer " + manufacturerName + " doesn't exist.\n");	
@@ -406,13 +412,16 @@ public class MedicineSocialNetwork {
 
 		System.out.println("Enter the name of the Shop from the given list :\n");
 		printShopsAndWarehouse();
+		System.out.println("\n");
 		String shopName = this.input.nextLine();
 		if(!this.shopsAndWarehouseDetails.containsKey(shopName)){
 			System.out.println("Invalid ShopAndWarehouse Name.\n");
 		}
 
 		else{
-			System.out.println("Enter the name of the Product :\n");
+			System.out.println("Enter the name of the Product from the given list:\n");
+			printProduct();
+			System.out.println("\n");
 			String productName = this.input.nextLine();
 			if(!this.productDetails.containsKey(productName)){
 				System.out.println("Invalid Product Name.\n");
@@ -438,14 +447,14 @@ public class MedicineSocialNetwork {
 	private void addAnOrder(){
 		System.out.println("Enter Customer Name from the list :\n");
 		this.printCustomer();
-		System.out.println("\n->");
+		System.out.println("\n");
 		String customerName = this.input.nextLine();
 		if(!this.customerDetails.containsKey(customerName)){
 			System.out.println("Invalid Customer Name.\n");
 		}else{
 			System.out.println("Enter the shop name from the list :\n");
 			printShopsAndWarehouse();
-			System.out.println("\n->");
+			System.out.println("\n");
 			String shopName = this.input.nextLine();
 			if(!this.shopsAndWarehouseDetails.containsKey(shopName)){
 				System.out.println("Invalid Shop Name.\n");
@@ -459,13 +468,26 @@ public class MedicineSocialNetwork {
 				type = this.input.nextInt();
 				if(type == 1){
 					System.out.println("Enter product name from the given list : \n");
+					this.shopsAndWarehouseDetails.get(shopName).productAndQuantity.forEach((key, value) -> System.out.println(key + " - " + Integer.toString(value)));
+					System.out.println("\n");
 					this.input.nextLine();
 					String productName = this.input.nextLine();
-
+					if(!this.shopsAndWarehouseDetails.get(shopName).productAndQuantity.containsKey(productName)){
+						System.out.println("Invalid product name.\n");
+						return;
+					}
 					System.out.println("Enter product quantity: \n");
 					int quantity = this.input.nextInt();
+					if(this.shopsAndWarehouseDetails.get(shopName).productAndQuantity.get(productName) < quantity){
+						System.out.println("Quantity exceeding from that present in shop\n");
+						return;
+					}
+					else{
 					order.productAndQuantity.put(productName,quantity);
 					this.customerDetails.get(customerName).purchases.put(productName,quantity);
+					int temp = this.shopsAndWarehouseDetails.get(shopName).productAndQuantity.get(productName);
+					this.shopsAndWarehouseDetails.get(shopName).productAndQuantity.put(productName, temp - quantity);
+				}
 				}
 			}
 			System.out.println("Order : \n");
